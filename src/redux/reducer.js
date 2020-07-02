@@ -4,12 +4,21 @@ const initialState = {
             id: 0,
             title: '',
             author: '',
-            photoUrl: '',
+            coverPhotoURL: '',
             isbnNumber: 0,
             price: 0,
             language: ''
         }
-    ]
+    ],
+    currentBook: {
+        id: 0,
+        title: '',
+        author: '',
+        coverPhotoURL: '',
+        isbnNumber: 0,
+        price: 0,
+        language: ''
+    }
 }
 
 export default function (state = initialState, action) {
@@ -20,6 +29,13 @@ export default function (state = initialState, action) {
                 booksList: [
                     ...action.payload.booksList
                 ]
+            }
+        }
+        case 'GET_BOOK_FROM_API' : {
+            return {
+                ...state,
+                currentBook: action.payload.bookItem
+                
             }
         }
         default: {

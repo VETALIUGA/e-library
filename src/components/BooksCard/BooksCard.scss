@@ -1,0 +1,44 @@
+.card {
+    &__section {
+        padding: 50px 0;
+    }
+    &__container {
+        max-width: 800px;
+        box-shadow: 0 0 5px rgba($color: #3f3f44, $alpha: .3);
+        background-color: #fff;
+        padding: 25px;
+        border-radius: 3px;
+    }
+    &__grid {
+        display: grid;
+        grid-template-columns: 2fr 1fr;
+        gap: 20px;
+    }
+    &__content {
+        &-item {
+            margin-bottom: 10px;
+            color: #3f3f44;
+        }
+    }
+    &__book {
+        &-photo {
+            width: 100%;
+        }
+        &-title {
+            font-size: 26px;
+            line-height: 1.3em;
+        }
+        &-author {
+            font-size: 16px;
+        }
+        &-isbn {
+            display: block;
+            font-weight: 500;
+        }
+        &-price {
+            display: block;
+            font-size: 16px;
+            font-weight: 700;
+        }
+    }
+}

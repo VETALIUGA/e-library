@@ -6,3 +6,12 @@ export const getBooksFromApi = (booksList) => {
         }
     }
 }
+
+export const getBookFromApi = (bookItem) => {
+    return {
+        type: 'GET_BOOK_FROM_API',
+        payload: {
+            bookItem
+        }
+    }
+}
