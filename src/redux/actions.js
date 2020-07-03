@@ -15,3 +15,12 @@ export const getBookFromApi = (bookItem) => {
         }
     }
 }
+
+export const setBookToApi = (bookItem) => {
+    return {
+        type: 'SET_BOOK_TO_API',
+        payload: {
+            bookItem
+        }
+    }
+}

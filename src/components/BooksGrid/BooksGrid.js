@@ -21,6 +21,31 @@ class BooksGrid extends React.Component {
         }
     }
 
+    deleteBook = async (id) => {
+        const url = `http://192.200.100.181:8081/rest/books/${id}`;
+        try {
+            let response = await fetch(url, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+            let json = await response.json();
+            this.getBooksListFromApi();
+            if (!json.status) {
+                this.setState({
+                    isSuccess: true
+                })
+            } else {
+                throw 'query failed';
+            }
+        }
+        catch (e) {
+            console.log(e);
+
+        }
+    }
+
     componentDidMount() {
         this.getBooksListFromApi();
     }
@@ -38,6 +63,7 @@ class BooksGrid extends React.Component {
                                     author={item.author}
                                     photoUrl={item.coverPhotoURL}
                                     id={item.id}
+                                    deleteHandler={this.deleteBook}
                                 />
                             )
                         })}

@@ -1,0 +1,28 @@
+.add-book {
+    &__section {
+        padding: 50px 0;
+    }
+    &__container {
+        max-width: 400px;
+    }
+    &__form {
+        &-item {
+            display: flex;
+            flex-direction: column;
+        }
+        &-label {
+            font-size: 14px;
+        }
+        &-input {
+            outline: none;
+            padding: 5px 10px;
+            margin-bottom: 10px;
+            font-family: inherit;
+        }
+        &-submit {
+            margin-top: 15px;
+            padding: 5px 10px;
+            font-family: inherit;
+        }
+    }
+}

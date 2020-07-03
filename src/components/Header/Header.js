@@ -13,6 +13,7 @@ const Header = (props) => {
                     <div className="grid-item header__grid-item">
                         <nav className="header__navigation">
                             <Link className="header__navigation-link" to="/">Books grid</Link>
+                            <Link className="header__navigation-link" to="/newBook">Add book</Link>
                         </nav>
                     </div>
                 </div>

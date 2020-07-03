@@ -10,6 +10,8 @@ const BooksGridItem = (props) => {
                 <h3 className="books__content-item books__title">{props.title}</h3>
                 <span className="books__content-item books__author">{props.author}</span>
                 <Link className="books__content-item books__link" to={`/book/${props.id}`}>Details...</Link>
+                <Link className="books__content-item books__link books__link--edit" to={`/editBook/${props.id}`}>Edit</Link>
+                <button onClick={()=>props.deleteHandler(props.id)} className="books__content-item books__button">Delete</button>
             </div>
         </div>
     )

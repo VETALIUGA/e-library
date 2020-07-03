@@ -31,12 +31,15 @@ export default function (state = initialState, action) {
                 ]
             }
         }
-        case 'GET_BOOK_FROM_API' : {
+        case 'GET_BOOK_FROM_API': {
             return {
                 ...state,
                 currentBook: action.payload.bookItem
-                
+
             }
+        }
+        case 'SET_BOOK_TO_API': {
+            return state;
         }
         default: {
             return state;

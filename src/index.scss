@@ -21,3 +21,12 @@ body {
   margin: 0 auto;
   max-width: 1170px;
 }
+
+
+.article {
+  color: #3f3f44;
+  &--lg {
+    font-size: 36px;
+    text-align: center;
+  }
+}
