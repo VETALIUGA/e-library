@@ -3,14 +3,12 @@ import './App.css';
 import routes from './routes';
 import Header from './components/Header/Header';
 
-const App = () => {
-  return (
-    <>
-      <Header />
-      {routes}
+const App = () => (
+  <>
+    <Header />
+    {routes}
 
-    </>
-  )
-}
+  </>
+);
 
 export default App;

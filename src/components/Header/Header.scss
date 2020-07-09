@@ -1,7 +1,9 @@
 .header {
     &__section {
         padding: 20px 0;
-        background-color: #cceabb;
+        background-color: #84a9ac;
+        position: absolute;
+        width: 100%;
     }
     &__grid {
         display: grid;
@@ -10,12 +12,12 @@
         align-items: center;
     }
     &__name {
-        font-size: 36px;
-        color: #3f3f44;
+        // font-size: 36px;
+        color: #204051;
     }
     &__navigation {
         &-link {
-            color: #3f3f44;
+            color: #204051;
             text-decoration: none;
             position: relative;
             padding-bottom: 5px;
@@ -33,10 +35,16 @@
                 right: 100%;
                 content: "";
                 display: block;
-                background-color: #3f3f44;
+                background-color: #204051;
                 height: 2px;
             }
             &:hover {
+                &:after {
+                    opacity: 1;
+                    right: 0;
+                }
+            }
+            &--active {
                 &:after {
                     opacity: 1;
                     right: 0;

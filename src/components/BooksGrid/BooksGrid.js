@@ -1,54 +1,40 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import './BooksGrid.scss';
 import BooksGridItem from './BooksGridItem';
 
 import { connect } from 'react-redux';
-import { getBooksFromApi } from '../../redux/actions';
+import { getBooksFromApi, deleteBookFromApi } from '../../redux/actions';
 
 class BooksGrid extends React.Component {
-    getBooksListFromApi = async () => {
-        const url = 'http://192.200.100.181:8081/rest/books';
-        try {
-            let response = await fetch(url);
-            let list = await response.json();
-            console.log(list);
-            this.props.onGetBooksFromApi(list);
-        }
-        catch (e) {
-            console.log(e);
-
-        }
+    
+    componentDidMount () {
+        this.props.onGetBooksFromApi();
     }
 
-    deleteBook = async (id) => {
-        const url = `http://192.200.100.181:8081/rest/books/${id}`;
-        try {
-            let response = await fetch(url, {
-                method: 'DELETE',
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            });
-            let json = await response.json();
-            this.getBooksListFromApi();
-            if (!json.status) {
-                this.setState({
-                    isSuccess: true
-                })
-            } else {
-                throw 'query failed';
-            }
-        }
-        catch (e) {
-            console.log(e);
+    // deleteBook = async (id) => {
+    //     const url = `http://192.200.100.181:8081/rest/books/${id}`;
+    //     try {
+    //         let response = await fetch(url, {
+    //             method: 'DELETE',
+    //             headers: {
+    //                 'Content-Type': 'application/json'
+    //             }
+    //         });
+    //         let json = await response.json();
+    //         this.getBooksListFromApi();
+    //         if (!json.status) {
+    //             this.setState({
+    //                 isSuccess: true
+    //             })
+    //         } else {
+    //             throw Error;
+    //         }
+    //     }
+    //     catch (e) {
+    //         console.log(e);
 
-        }
-    }
-
-    componentDidMount() {
-        this.getBooksListFromApi();
-    }
+    //     }
+    // }
 
     render() {
         return (
@@ -63,7 +49,7 @@ class BooksGrid extends React.Component {
                                     author={item.author}
                                     photoUrl={item.coverPhotoURL}
                                     id={item.id}
-                                    deleteHandler={this.deleteBook}
+                                    deleteHandler={this.props.onDeleteBookFromApi}
                                 />
                             )
                         })}
@@ -82,7 +68,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        onGetBooksFromApi: (booksList) => dispatch(getBooksFromApi(booksList))
+        onGetBooksFromApi: (booksList) => dispatch(getBooksFromApi(booksList)),
+        onDeleteBookFromApi: (bookId) => dispatch(deleteBookFromApi(bookId))
     }
 }
 

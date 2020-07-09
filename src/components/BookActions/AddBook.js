@@ -1,79 +1,63 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import './AddBook.scss';
+import { connect } from 'react-redux';
 import SectionArticle from '../SectionArticle/SectionArticle';
 import BookForm from './BookForm';
 
-import { connect } from 'react-redux';
-import { setBookToApi } from '../../redux/actions';
+// import { setBookToApi } from '../../redux/actions';
 
+const AddBook = (props) => {
+  let successTimer = null;
 
-class AddBook extends React.Component {
+  const [isSuccess, setSuccess] = useState(false);
+  useEffect(() => () => {
+    clearTimeout(successTimer);
+  });
 
-    state = {
-        isSuccess: false
+  const handleSubmit = async (values, { setSubmitting }) => {
+    const url = 'http://192.200.100.181:8081/rest/books';
+    try {
+      const response = await fetch(url, {
+        method: 'POST',
+        body: JSON.stringify(values),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+      setSubmitting(false);
+      const json = await response.json();
+      if (!json.status) {
+        console.log('Form successfully sent with json:', json);
+        setSuccess(true);
+        successTimer = setTimeout(() => setSuccess(false), 2300);
+      } else {
+        throw Error;
+      }
+    } catch (e) {
+      console.log('Error', e);
     }
+  };
 
-    submitForm = async (e) => {
-        e.preventDefault();
-        console.log('submitted')
-        const { match: { params } } = this.props;
-        const formValues = e.target;
-        const newBook = {};
-        const url = 'http://192.200.100.181:8081/rest/books';
-        for (let i = 0; i < formValues.length; i++) {
-            if (formValues[i].name !== "") {
-                newBook[formValues[i].name] = formValues[i].value;
-            }
-        }
-        console.log(newBook);
-        try {
-            let response = await fetch(url, {
-                method: 'POST',
-                body: JSON.stringify(newBook),
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            });
-            let json = await response.json();
-            if (!json.status) {
-                this.setState({
-                    isSuccess: true
-                })
-            } else {
-                throw 'query failed';
-            }
+  return (
+    <section className="section add-book__section">
+      <div className="container add-book__container">
+        <SectionArticle title="Add book" class="add-book" />
+        <BookForm
+          submitForm={handleSubmit}
+          bookItem={props.booksList.find((item) => item.id === +props.match.params.bookId)}
+        />
+        {isSuccess ? <div className="add-book__msg-success">Successfully</div> : ''}
+      </div>
+    </section>
+  );
+};
 
-        }
-        catch (e) {
-            console.log("Error", e);
+const mapStateToProps = (state) => ({
+  booksList: state.booksList,
+});
 
-        }
-
-    }
-
-    render() {
-        return (
-            <section className="section add-book__section">
-                <div className="container add-book__container">
-                    <SectionArticle title="Add book" class="add-book" />
-                    <BookForm submitForm={this.submitForm} />
-                    <div>{this.state.isSuccess ? 'success' : ''}</div>
-                </div>
-            </section>
-        )
-    }
-}
-
-const mapStateToProps = (state) => {
-    return {
-        booksList: state.booksList
-    }
-}
-
-const mapDispatchToProps = (dispatch) => {
-    return {
-        onSetBookToApi: (bookItem) => dispatch(setBookToApi(bookItem))
-    }
-}
+const mapDispatchToProps = (dispatch) => ({
+  // onSetBookToApi: (bookItem) => dispatch(setBookToApi(bookItem))
+});
 
 export default connect(mapStateToProps, mapDispatchToProps)(AddBook);

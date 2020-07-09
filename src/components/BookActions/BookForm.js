@@ -1,74 +1,82 @@
 import React from 'react';
+import { Formik } from 'formik';
+import BookFormItem from './BookFormItem';
 
 const BookForm = (props) => {
-    console.log('current book', props.bookItem)
-    if (props.bookItem) {
-        return (
-            <form onSubmit={props.submitForm} className="add-book__form">
-                <div className="add-book__form-item">
-                    <label htmlFor="title" className="label add-book__form-label">Title</label>
-                    <input className="input add-book__form-input" required type="text" name="title" id="title" defaultValue={props.bookItem.title} />
-                </div>
-                <div className="add-book__form-item">
-                    <label htmlFor="author" className="label add-book__form-label">Author</label>
-                    <input className="input add-book__form-input" type="text" name="author" id="author" defaultValue={props.bookItem.author} />
-                </div>
-                <div className="add-book__form-item">
-                    <label htmlFor="coverPhotoURL" className="label add-book__form-label">Photo URL</label>
-                    <input className="input add-book__form-input" type="url" name="coverPhotoURL" id="coverPhotoURL" defaultValue={props.bookItem.coverPhotoURL} />
-                </div>
-                <div className="add-book__form-item">
-                    <label htmlFor="isbnNumber" className="label add-book__form-label">ISBN</label>
-                    <input className="input add-book__form-input" type="text" name="isbnNumber" id="isbnNumber" defaultValue={props.bookItem.isbnNumber} />
-                </div>
-                <div className="add-book__form-item">
-                    <label htmlFor="price" className="label add-book__form-label">Price</label>
-                    <input className="input add-book__form-input" type="text" name="price" id="price" defaultValue={props.bookItem.price} />
-                </div>
-                <div className="add-book__form-item">
-                    <label htmlFor="language" className="label add-book__form-label">Language</label>
-                    <input className="input add-book__form-input" type="text" name="language" id="language" defaultValue={props.bookItem.language} />
-                </div>
-                <div className="add-book__form-item">
-                    <input className="input add-book__form-submit" type="submit" value="Save changes" />
-                </div>
-            </form>
-        )
-    }
-    else {
-        return (
-            <form onSubmit={props.submitForm} className="add-book__form">
-                <div className="add-book__form-item">
-                    <label htmlFor="title" className="label add-book__form-label">Title</label>
-                    <input className="input add-book__form-input" required type="text" name="title" id="title" />
-                </div>
-                <div className="add-book__form-item">
-                    <label htmlFor="author" className="label add-book__form-label">Author</label>
-                    <input className="input add-book__form-input" type="text" name="author" id="author" />
-                </div>
-                <div className="add-book__form-item">
-                    <label htmlFor="coverPhotoURL" className="label add-book__form-label">Photo URL</label>
-                    <input className="input add-book__form-input" type="url" name="coverPhotoURL" id="coverPhotoURL" />
-                </div>
-                <div className="add-book__form-item">
-                    <label htmlFor="isbnNumber" className="label add-book__form-label">ISBN</label>
-                    <input className="input add-book__form-input" type="text" name="isbnNumber" id="isbnNumber" />
-                </div>
-                <div className="add-book__form-item">
-                    <label htmlFor="price" className="label add-book__form-label">Price</label>
-                    <input className="input add-book__form-input" type="text" name="price" id="price" />
-                </div>
-                <div className="add-book__form-item">
-                    <label htmlFor="language" className="label add-book__form-label">Language</label>
-                    <input className="input add-book__form-input" type="text" name="language" id="language" />
-                </div>
-                <div className="add-book__form-item">
-                    <input className="input add-book__form-submit" type="submit" value="Save changes" />
-                </div>
-            </form>
-        )
-    }
-
-}
+  return (
+    <Formik
+      initialValues={
+                props.bookItem ?
+                {
+                  title: props.bookItem.title,
+                  author: props.bookItem.author,
+                  coverPhotoURL: props.bookItem.coverPhotoURL,
+                  isbnNumber: props.bookItem.isbnNumber,
+                  price: props.bookItem.price,
+                  language: props.bookItem.language,
+                } : {
+                  title: '',
+                  author: '',
+                  coverPhotoURL: '',
+                  isbnNumber: '',
+                  price: '',
+                  language: '',
+                }
+            }
+      validate={(values) => {
+        const errors = {};
+        if (!values.title) {
+          errors.title = 'Required';
+        }
+        if (!values.author) {
+          errors.author = 'Required';
+        }
+        if (!(values.isbnNumber.toString().length === 10)) {
+          errors.isbnNumber = 'Should have 10 digits';
+        }
+        if (
+          !/https?:\/\/(www\.)?[-a-zA-Z0-9@:%._~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_.~#?&//=]*)/.test(values.coverPhotoURL)
+        ) {
+          errors.coverPhotoURL = 'Invalid URL';
+        }
+        if (!values.price) {
+          errors.price = 'Required';
+        }
+        if (!values.language) {
+          errors.language = 'Required';
+        }
+        return errors;
+      }}
+      onSubmit={props.submitForm}
+    >
+      {({
+        values,
+        errors,
+        touched,
+        handleChange,
+        handleBlur,
+        handleSubmit,
+        isSubmitting,
+        isValid,
+      }) => (
+        <form onSubmit={handleSubmit} className="add-book__form">
+          {Object.entries(values).map((item, index) => (
+            <BookFormItem
+              key={index}
+              name={item[0]}
+              value={item[1]}
+              handleChange={handleChange}
+              handleBlur={handleBlur}
+              errors={errors[item[0]] && touched[item[0]] && errors[item[0]]}
+            />
+          ))}
+          <button className={`add-book__form-submit ${isValid ? '' : 'add-book__form-submit--disabled'}`} type="submit" disabled={isSubmitting}>
+            Submit
+          </button>
+        </form>
+      )}
+    </Formik>
+  );
+};
 
 export default BookForm;
